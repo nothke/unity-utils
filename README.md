@@ -7,3 +7,4 @@ Most scripts contain description on how to use them in the header, unless the us
 * SingletonScriptableObject.cs - A self referencing ScriptableObject, useful for global game settings and such.
 * Closest.cs - Extension for arrays or lists of components for finding closest GameObjects. E.g. `Clock closestClock = listOfClocks.GetClosest(player.transform.position);`
 * RTUtils.cs - RenderTexture utilities for direct drawing sprites, converting to Texture2D;
+* ProceduralReverb.cs - Calculates reverb parameters by raycasting into the world around the player. First used in "Bruturb"
