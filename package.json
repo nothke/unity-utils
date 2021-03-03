@@ -1,0 +1,11 @@
+{
+  "name": "nothke.utils",
+  "displayName": "Nothke's Utils",
+  "version": "1.0.0",
+  "unity": "2019.1",
+  "description": "A bunch of single-file utilities",
+  "keywords": [ "utils", "toolbox" ],
+  "category": "Utils",
+  "dependencies": {
+  }
+}
