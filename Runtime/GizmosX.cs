@@ -4,7 +4,7 @@
 using UnityEditor;
 #endif
 
-namespace Nothke.Utils
+namespace Nothke.Utilities
 {
     public static class GizmosX
     {
