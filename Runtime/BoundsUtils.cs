@@ -60,7 +60,7 @@ namespace Nothke.Utilities
 
             Bounds goBounds = GetBoundsInRootSpace(meshFilterCache[0]);
 
-            for (int i = 1; i < colliderCache.Count; i++)
+            for (int i = 1; i < meshFilterCache.Count; i++)
             {
                 Bounds b = GetBoundsInRootSpace(meshFilterCache[i]);
                 goBounds.Encapsulate(b);
