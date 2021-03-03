@@ -15,8 +15,7 @@ namespace Nothke.Utilities
         /// </summary>
         public static Bounds GetObjectSpaceColliderBounds(GameObject go, bool includeInactive = false)
         {
-            Transform t = go.transform;
-            var rootW2L = t.worldToLocalMatrix;
+            var rootW2L = go.transform.worldToLocalMatrix;
 
             go.GetComponentsInChildren(includeInactive, colliderCache);
 
@@ -48,7 +47,6 @@ namespace Nothke.Utilities
         public static Bounds GetObjectSpaceRendererBounds(GameObject go, bool includeInactive = false)
         {
             var rootW2L = go.transform.worldToLocalMatrix;
-            Debug.DrawRay(go.transform.worldToLocalMatrix * go.transform.position, Vector3.right, Color.red);
 
             go.GetComponentsInChildren(includeInactive, meshFilterCache);
 
