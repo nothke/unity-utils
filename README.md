@@ -3,5 +3,6 @@ A set of single-script Unity utilities I created or collected over the many year
 Most scripts contain description on how to use them in the header, unless the usage is self evident.
 
 ### Includes:
-* GizmosX - Extensions for drawing additional gizmos in OnDrawGizmos() function, like circles, cubes (with rotation!), labels, etc.. Editor only.
-* SingletonScriptableObject - A self referencing ScriptableObject, useful for global game settings and such.
+* GizmosX.cs - Extensions for drawing additional gizmos in OnDrawGizmos() function, like circles, cubes (with rotation!), labels, etc.. Editor only.
+* SingletonScriptableObject.cs - A self referencing ScriptableObject, useful for global game settings and such.
+* Closest.cs - Extension for arrays or lists of components for finding closest GameObjects. E.g. `arrayOfClocksComponents.GetClosest(player.transform);`
