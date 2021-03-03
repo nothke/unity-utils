@@ -47,8 +47,8 @@ namespace Nothke.Utilities
 
         public static Bounds GetObjectSpaceRendererBounds(GameObject go, bool includeInactive = false)
         {
-            Transform t = go.transform;
-            var rootW2L = t.worldToLocalMatrix;
+            var rootW2L = go.transform.worldToLocalMatrix;
+            Debug.DrawRay(go.transform.worldToLocalMatrix * go.transform.position, Vector3.right, Color.red);
 
             go.GetComponentsInChildren(includeInactive, meshFilterCache);
 
@@ -133,13 +133,13 @@ namespace Nothke.Utilities
             Vector3 p7 = new Vector3(p1.x, p1.y, p0.z);
 
             Bounds b = new Bounds(mat * p0, Vector3.zero);
-            b.Encapsulate(mat * p1);
-            b.Encapsulate(mat * p2);
-            b.Encapsulate(mat * p3);
-            b.Encapsulate(mat * p4);
-            b.Encapsulate(mat * p5);
-            b.Encapsulate(mat * p6);
-            b.Encapsulate(mat * p7);
+            b.Encapsulate(mat.MultiplyPoint(p1));
+            b.Encapsulate(mat.MultiplyPoint(p2));
+            b.Encapsulate(mat.MultiplyPoint(p3));
+            b.Encapsulate(mat.MultiplyPoint(p4));
+            b.Encapsulate(mat.MultiplyPoint(p5));
+            b.Encapsulate(mat.MultiplyPoint(p6));
+            b.Encapsulate(mat.MultiplyPoint(p7));
 
             return b;
         }
