@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Nothke.Utilities
+namespace Nothke.Utils
 {
     public static class RTUtils
     {
