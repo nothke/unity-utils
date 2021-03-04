@@ -1,5 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿///
+/// RTUtils by Nothke
+/// 
+/// RenderTexture utilities for direct drawing sprites and converting to Texture2D.
+/// Requires BlitQuad shader.
+/// 
+/// ============================================================================
+///
+/// MIT License
+///
+/// Copyright(c) 2021 Ivan Notaroš
+/// 
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+/// 
+/// ============================================================================
+/// 
+
 using UnityEngine;
 
 namespace Nothke.Utils
@@ -54,7 +85,7 @@ namespace Nothke.Utils
             if (blitShader)
                 return blitShader;
 
-            var shader = Shader.Find("Hidden/BlitTest");
+            var shader = Shader.Find("Hidden/BlitQuad");
 
             if (!shader)
                 Debug.LogError("BlitTest shader not found, did you forget to include it in the project settings?");
