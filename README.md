@@ -19,3 +19,7 @@ Most scripts contain description on how to use them in the header, unless the us
 * [NAudio](https://github.com/nothke/NAudio) - Single line audio playing utils.
 * [NDraw](https://github.com/nothke/NDraw) - Runtime [debug] line drawing. similar to Unity's Gizmos, but runtime.
 * [ProtoGUI](https://github.com/nothke/ProtoGUI) - Runtime window drawer with a few additional tricks that looks a bit better than Unity's standard GUI.
+
+### License:
+
+All scripts use MIT license. Primarily to avoid liability. License info is embedded in each script as they are meant to be used separately.
