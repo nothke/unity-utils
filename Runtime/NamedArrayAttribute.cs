@@ -1,3 +1,15 @@
+///
+/// NamedArrayAttribute, originally made by idbrii, found at:
+/// http://answers.unity.com/answers/1472176/view.html
+/// 
+/// Replaces array element labels with enum names in the inspector.
+/// 
+/// Example:
+/// 
+///     [NamedArray(typeof(LiquidType))]
+///     public Color[] liquidColors;
+///
+
 using UnityEngine;
 using System;
 
