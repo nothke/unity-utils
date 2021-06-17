@@ -10,7 +10,7 @@
 ///
 /// MIT License
 ///
-/// Copyright(c) 2021 Ivan Notaroö
+/// Copyright(c) 2021 Ivan Notaro≈°
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -43,15 +43,19 @@ public class LabelDrawer : MonoBehaviour
     {
         public readonly string text;
         public readonly Vector3 position;
+        public readonly Color color;
 
-        public Label3D(string text, Vector3 position)
+        public Label3D(string text, Vector3 position, Color color)
         {
             this.text = text;
             this.position = position;
+            this.color = color;
         }
     }
 
     List<Label3D> labels = new List<Label3D>();
+
+    static readonly Color defaultColor = Color.white;
 
     public static LabelDrawer e;
     void Awake()
@@ -83,17 +87,21 @@ public class LabelDrawer : MonoBehaviour
         }
     }
 
+
     public static void Label(string text, Vector3 position)
     {
-        if (!Application.isPlaying)
-            CreateIfDoesntExist();
+        CreateIfDoesntExist();
 
         if (e.enabled)
-        {
-            e.labels.Add(new Label3D(text, position));
+            e.labels.Add(new Label3D(text, position, defaultColor));
+    }
 
+    public static void Label(string text, Vector3 position, Color color)
+    {
+        CreateIfDoesntExist();
 
-        }
+        if (e.enabled)
+            e.labels.Add(new Label3D(text, position, color));
     }
 
     private void OnDisable()
@@ -106,25 +114,43 @@ public class LabelDrawer : MonoBehaviour
     {
         Camera cam = Camera.main;
 
+        Color originalContentColor = GUI.contentColor;
+
         foreach (var label in labels)
         {
             Vector3 screenPos = cam.WorldToScreenPoint(label.position);
             if (screenPos.z < 0) // if behind
                 continue;
 
-            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y, 100, 100), label.text);
+            GUI.contentColor = label.color;
+            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y, 1000, 1000), label.text);
         }
+
+        GUI.contentColor = originalContentColor;
     }
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying && e && e.enabled)
+        bool isGameView = UnityEditor.SceneView.currentDrawingSceneView == null;
+
+        if (Application.isPlaying && !isGameView && e && e.enabled)
         {
-            foreach (var label in labels)
+            if (Application.isEditor)
             {
-                UnityEditor.Handles.Label(label.position, label.text);
+                GUIStyle style = new GUIStyle();
+
+                foreach (var label in labels)
+                {
+                    style.normal.textColor = label.color;
+                    UnityEditor.Handles.Label(label.position, label.text, style);
+                }
             }
+
+            // Required because WaitForEndOfFrame doesn't work when Game view is not visible
+            // When both Game and Scene view are visible at the same time tho, it should only clear when Game is not in focus
+            if (!Application.isFocused)
+                labels.Clear();
         }
     }
 #endif
