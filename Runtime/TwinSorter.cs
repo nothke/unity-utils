@@ -67,15 +67,16 @@ using UnityEngine;
 
 namespace Nothke.Utils
 {
-    /// <summary>
-    /// Sorts a target list by values in the sorter list.
-    /// Useful when having a cache of precomputed values by which you want to sort another list.
-    /// (..And to avoid having to use Linq and delegates)
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="U"></typeparam>
     public static class TwinSorter
     {
+        /// <summary>
+        /// Sorts a target list by values in the sorter list.
+        /// Useful when having a cache of precomputed values by which you want to sort another list,
+        /// and to avoid having to use Linq and delegates.
+        /// Both lists will be sorted.
+        /// </summary>
+        /// <typeparam name="T">Target</typeparam>
+        /// <typeparam name="U">Sorter</typeparam>
         public static void TwinSort<T, U>(this List<T> target, List<U> sorter) where U : System.IComparable<U>
         {
             if (target.Count != sorter.Count)
@@ -84,48 +85,49 @@ namespace Nothke.Utils
             qSort(target, sorter, 0, target.Count - 1);
         }
 
-        private static void qSort<T, U>(List<T> inputs, List<U> toSort, int left, int right) where U : System.IComparable<U>
+        // C# qSort source from: https://stackoverflow.com/questions/56528433/creating-a-quick-sort-using-recursion-and-generics
+        private static void qSort<T, U>(List<T> target, List<U> sorter, int left, int right) where U : System.IComparable<U>
         {
-            //set the indexes
+            // Set the indexes
             int leftIndex = left;
             int rightIndex = right;
 
-            //get the pivot
-            var pivot = toSort[left + (right - left) / 2];
+            // Get the pivot
+            var pivot = sorter[left + (right - left) / 2];
             while (leftIndex <= rightIndex)
             {
-                //check left values
-                while (toSort[leftIndex].CompareTo(pivot) < 0)
+                // Check left values
+                while (sorter[leftIndex].CompareTo(pivot) < 0)
                     leftIndex++;
 
-                //check right values
-                while (toSort[rightIndex].CompareTo(pivot) > 0)
+                // Check right values
+                while (sorter[rightIndex].CompareTo(pivot) > 0)
                     rightIndex--;
 
-                //swap
+                // Swap
                 if (leftIndex <= rightIndex)
                 {
-                    var tmp = toSort[leftIndex];
-                    toSort[leftIndex] = toSort[rightIndex];
-                    toSort[rightIndex] = tmp;
+                    var tmp = sorter[leftIndex];
+                    sorter[leftIndex] = sorter[rightIndex];
+                    sorter[rightIndex] = tmp;
 
-                    // swap the target list as well
-                    var tmpi = inputs[leftIndex];
-                    inputs[leftIndex] = inputs[rightIndex];
-                    inputs[rightIndex] = tmpi;
+                    // Swap the target list as well
+                    var tmpi = target[leftIndex];
+                    target[leftIndex] = target[rightIndex];
+                    target[rightIndex] = tmpi;
 
-                    //move towards pivot
+                    // Move towards pivot
                     leftIndex++;
                     rightIndex--;
                 }
             }
             
-            //continues to sort left and right of pivot
+            // Continues to sort left and right of pivot
             if (left < rightIndex)
-                qSort(inputs, toSort, left, rightIndex);
+                qSort(target, sorter, left, rightIndex);
 
             if (leftIndex < right)
-                qSort(inputs, toSort, leftIndex, right);
+                qSort(target, sorter, leftIndex, right);
         }
     }
 }
