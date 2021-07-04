@@ -14,6 +14,7 @@ Most scripts contain description on how to use them in the header, unless the us
 * BezierUtility.cs - Contains both pure functions and a struct (for ease of use), for drawing, finding tangents and closest points for cubic bezier curves. Originally derived from BezierUtility found in Unity's URP package.
 * ArrayRandomExtension.cs - Extension for getting a random element from a list or array with `array.GetRandom()`
 * NamedArrayAttribute.cs - Replaces array element labels with enum names in the inspector.
+* TwinSorter.cs - Sorts a "target" list by values in the "sorter" list. Useful when having a cache of precomputed values by which you want to sort another list and avoid delegates or Linq.
 
 ### Other utils you might like not in this repo:
 * [FlyCam](https://github.com/nothke/FlyCam) - Simple WASD flyable camera with zooming and changing speed on scroll.
