@@ -38,6 +38,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
 
 namespace Nothke.Utils
 {
@@ -58,8 +59,7 @@ namespace Nothke.Utils
         /// </summary>
         public static void CreateAsset(Object o, in string path)
         {
-            string folderPath = System.IO.Path.GetDirectoryName(path);
-            Debug.Log(folderPath);
+            string folderPath = Path.GetDirectoryName(path);
 
             if (!AssetDatabase.IsValidFolder(folderPath))
                 CreateFolder(folderPath);
@@ -73,8 +73,8 @@ namespace Nothke.Utils
         /// </summary>
         public static bool CreateFolder(in string path)
         {
-            var dir = new System.IO.DirectoryInfo(path);
-            Debug.Log("DIR:" + dir.ToString());
+            // Makes sure separators are converted to \
+            var dir = new DirectoryInfo(path);
 
             var strs = dir.ToString().Split('\\');
 
