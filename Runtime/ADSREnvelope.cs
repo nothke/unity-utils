@@ -1,4 +1,47 @@
-﻿using UnityEngine;
+﻿///
+/// ADSREnvelope.cs by Nothke
+///
+/// Attack-Decay-Sustain-Release envelope helper struct. 
+/// Also comes with an optional, but recommended, custom property drawer
+/// (see Editor/ADSREnvelopeDrawer.cs)
+///
+/// Important notes:
+/// * When using it as a field, initialize one with .Default(),
+///   so that values are properly initialized, like this:
+///   `public ADSREnvelope envelope = ADSREnvelope.Default();`
+/// * To get a value, use envelope.Update(signalBool, deltaTime);
+/// * Use interrupt if you want the value to be interrupted immediately 
+///   when signal is cut (see tooltip)
+///
+///
+/// ============================================================================
+///
+/// MIT License
+///
+/// Copyright(c) 2021 Ivan Notaroš
+/// 
+/// Permission is hereby granted, free of charge, to any person obtaining a copy
+/// of this software and associated documentation files (the "Software"), to deal
+/// in the Software without restriction, including without limitation the rights
+/// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+/// copies of the Software, and to permit persons to whom the Software is
+/// furnished to do so, subject to the following conditions:
+/// 
+/// The above copyright notice and this permission notice shall be included in all
+/// copies or substantial portions of the Software.
+/// 
+/// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+/// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+/// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+/// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+/// SOFTWARE.
+/// 
+/// ============================================================================
+///
+
+using UnityEngine;
 
 namespace Nothke.Utils
 {
@@ -60,7 +103,7 @@ namespace Nothke.Utils
 
         public float Update(bool value, float dt)
         {
-            // If interrup is not set, this makes the value "sticky",
+            // If interrupt is not set, this makes the value "sticky",
             // so it keeps being on until the end of decay
             if (lastPressed && !interrupt && time < attack + decay)
             {
@@ -104,17 +147,5 @@ namespace Nothke.Utils
                 return Mathf.Pow(p_x, p_c + 1);
             }
         }
-
-        /*
-        // Overshoots for |p_c| > 3
-        public static float Ease(float p_x, float p_c)
-        {
-            if (p_x < 0)
-                return 0;
-            else if (p_x > 1.0f)
-                return 1.0f;
-
-            return ((p_c * (1.0f - p_x) + 2.0f) * (1.0f - p_x) + 1.0f) * p_x * p_x;
-        }*/
     }
 }
