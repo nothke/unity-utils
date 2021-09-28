@@ -11,6 +11,7 @@ namespace Nothke.Utils
         public float decayEase;
         public float releaseEase;
 
+        [Tooltip("If disabled, no matter how short the signal is, it will be played until at least the end of decay time. If on, the end of signal will \"interrupt\" the attack or decay and immediatelly skip to release.")]
         public bool interrupt;
 
         float time;
@@ -18,6 +19,17 @@ namespace Nothke.Utils
         float lastOnValue;
 
         public float Time => time;
+
+        public static ADSREnvelope Default()
+        {
+            return new ADSREnvelope()
+            {
+                attack = 1,
+                decay = 1,
+                sustain = 0.5f,
+                release = 1
+            };
+        }
 
         public float EvaulateIn(float time)
         {
@@ -47,7 +59,6 @@ namespace Nothke.Utils
 
         public float Update(bool value, float dt)
         {
-
             // If interrup is not set, this makes the value "sticky",
             // so it keeps being on until the end of decay
             if (lastPressed && !interrupt && time < attack + decay)
