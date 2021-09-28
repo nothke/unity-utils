@@ -17,6 +17,7 @@ Most scripts contain description on how to use them in the header, unless the us
 * TwinSorter.cs - Sorts a "target" list by values in the "sorter" list. Useful when having a cache of precomputed values by which you want to sort another list and avoid delegates or Linq.
 * RingBuffer.cs - A simple fixed-sized contiguous double-sided indexable ring buffer (circular queue).
 * AssetDatabaseUtils.cs - Provides a few useful functions to help with AssetDatabase usage, like creating an asset with the full folder hierarchy, etc.
+* ADSREnvelope.cs - Attack-Decay-Sustain-Release envelope helper struct. Can also keep time state, just pass a signal and deltaTime to Update() and it will give you a float. Also comes with an optional, but recommended, custom property drawer in [Editor/ADSREnvelopeDrawer.cs](Editor/ADSREnvelopeDrawer.cs)
 
 ### Other utils you might like not in this repo:
 * [FlyCam](https://github.com/nothke/FlyCam) - Simple WASD flyable camera with zooming and changing speed on scroll.

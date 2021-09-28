@@ -1,10 +1,5 @@
 ﻿using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
-
-using System;
-using System.Reflection;
 
 namespace Nothke.Utils
 {
@@ -25,13 +20,11 @@ namespace Nothke.Utils
             float h = EditorGUIUtility.singleLineHeight;
             float fullWidth = position.width;
 
-            // Using BeginProperty / EndProperty on the parent property means that
-            // prefab override logic works on the entire property.
             EditorGUI.BeginProperty(position, label, property);
 
             float startX = position.x;
 
-            // Draw label
+            // Draw label foldout
             Rect foldRect = position;
             foldRect.height = h;
             fold = EditorGUI.Foldout(foldRect, fold, label, true);
@@ -62,8 +55,6 @@ namespace Nothke.Utils
                 interrupt = interruptProp.boolValue
             };
 
-            //ADSREnvelope adsr = (ADSREnvelope)fieldInfo.GetValue(property.serializedObject.targetObject);
-
             Rect curveRect = position;
 
             if (!fold)
@@ -76,8 +67,6 @@ namespace Nothke.Utils
                 curveRect.width = fullWidth;
                 curveRect.height = h * 3;
             }
-
-            //EditorGUI.DrawRect(curveRect, Color.black);
 
             Vector2 curveStart = curveRect.position - new Vector2(0, -curveRect.height);
             Vector2 lastP = curveStart;
@@ -113,8 +102,6 @@ namespace Nothke.Utils
             miniRect.width = (int)releaseWidth;
             EditorGUI.DrawRect(miniRect, new Color(1.0f, 0.0f, 1.0f) * colorAlpha);
 
-
-            //float graphScale = Mathf.Max(attackDecayScale, releaseScale);
             float graphScale = adrScale;
             Handles.color = Color.white;
             for (int i = 0; i < viewWidth; i++)
@@ -141,7 +128,6 @@ namespace Nothke.Utils
 
             if (fold)
             {
-                // Don't make child fields be indented
                 var indent = EditorGUI.indentLevel;
                 EditorGUI.indentLevel = 0;
 
@@ -178,7 +164,6 @@ namespace Nothke.Utils
 
                 sustainProp.floatValue = Mathf.Clamp01(sustainProp.floatValue);
 
-                // Set indent back to what it was
                 EditorGUI.indentLevel = indent;
 
                 EditorGUIUtility.labelWidth = 0;
