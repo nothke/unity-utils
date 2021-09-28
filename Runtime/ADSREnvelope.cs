@@ -11,7 +11,8 @@ namespace Nothke.Utils
         public float decayEase;
         public float releaseEase;
 
-        [Tooltip("If disabled, no matter how short the signal is, it will be played until at least the end of decay time. If on, the end of signal will \"interrupt\" the attack or decay and immediatelly skip to release.")]
+        [Tooltip("If disabled, no matter how short the signal is, it will be played until at least the end of decay time. " +
+            "\n\nIf enabled, the end of signal will \"interrupt\" the attack or decay and immediatelly skip to release.")]
         public bool interrupt;
 
         float time;
