@@ -75,7 +75,7 @@ namespace Nothke.Utils
             };
         }
 
-        public float EvaulateIn(float time)
+        public float EvaluateIn(float time)
         {
             if (time < attack)
                 return 1 - Ease(1 - time / attack, attackEase);
