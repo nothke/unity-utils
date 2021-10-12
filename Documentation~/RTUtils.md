@@ -8,7 +8,9 @@ RenderTexture utilities for directly drawing meshes, text or textures (sprites) 
 
 ### Why?
 
-Typically, rendering to an off-screen texture in Unity is done via a second camera to which you apply a rander texture as a target. However, in the quite common case when you wish to draw simple things, like a few quads, text or a simple unlit mesh, a full Unity camera has an uncecessary overhead, which includes culling, batching, drawing shadows, sorting geometry, etc. This is especially true in HDRP, where the upfront cost of camera rendering is especially high.
+Typically, rendering to an off-screen texture in Unity is done via a second Camera to which you apply a RenderTexture as a target. However, in the quite common case when you wish to draw simple things, like a few quads, text or a simple unlit mesh, a full Unity camera has an uncecessary overhead, which includes lighting, culling, batching, drawing shadows, sorting geometry, etc. This is especially true in HDRP, where the upfront cost of camera rendering is especially high.
+
+However, if you do need features such as lighting, shadows and other rendering features, then you really need to use a separate Camera. Attempting to draw a lit mesh will RTUtils methods results in strange lighting artifacts.
 
 ## How to render without a camera
 
@@ -24,7 +26,7 @@ IMPORTANT: Once you start rendering, you must not forget to end it with `rt.EndR
 
 ### Drawing
 
-In between the `rt.BeginXXXRendering()` and `rt.EndRendering()` functions, you can call any of the GL functions (for example `GL.Clear(true, true, Color.black)` to clear the texture), or you can use any of the following:
+In between the `rt.BeginXXXRendering()` and `rt.EndRendering()` functions, you can call any of the GL functions (for example `GL.Clear(true, true, Color.black)` to clear the texture), or you can use any of the following extensions:
 
 #### Meshes
 
@@ -32,7 +34,9 @@ Use `rt.DrawMesh(text, position, size)` to draw TMPText meshes.
 
 #### Sprites
 
-You can also draw a simple texture in a rect with 
+You can also draw a texture in a rect with `DrawSprite(texture, rect)`. The texture will be drawn on top with a default sprite material, which uses alpha transparency.
+
+If you wish to use a custom material for drawing a quad, you can use `DrawQuad(material, rect)`.
 
 #### TMP Text
 
@@ -45,6 +49,7 @@ Note that you will need to setup your TMPText object before you draw it:
 - Note that the function will use the currently set material to TMPText. But it doesn't scale SDF-antialiasing properly, so you'll need to tweak the smoothing parameter in the SDF material to get the right antialiasing for the right font size.
 
 ## Example
+This example renders the gif above:
 
 ```
 using Nothke.Utils;
@@ -79,7 +84,7 @@ rt.EndRendering(); // Ends ortho rendering
 
 In some of my tests with CommandBuffers, they turned out to be slower to execute than just simply calling GL functions. The difference is that RTUtils functions (currently) execute on the main thread, while using the CommandBuffers executes in a separate rendering thread. However, you still need to setup the buffer in the main thread, and there is some overhead for the execution as well. So if you just want to draw a couple of meshes, calling them on the main thread turns out to be faster.
 
-However, if you wish to render a lot more meshes onto a RenderTexture, using CommandBuffers is a the way to go, but I feel that if you want to use them, you should write them yourself, here is an example to get you started:
+However, if you wish to render a lot more meshes onto a RenderTexture, using CommandBuffers is the way to go. I feel that if you want to use them, you should write them yourself. Here is an example to get you started:
 
 ```
 using UnityEngine.Rendering;
