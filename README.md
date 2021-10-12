@@ -6,7 +6,7 @@ Most scripts contain description on how to use them in the header, unless the us
 * GizmosX.cs - Extensions for drawing additional gizmos in OnDrawGizmos() function, like circles, cubes (with rotation!), labels, arcs, heightfields etc.. Editor only.
 * SingletonScriptableObject.cs - A self referencing ScriptableObject, useful for global game settings and such.
 * Closest.cs - Extension for finding a closest instance for an array of components. E.g. `Clock closestClock = listOfClocks.GetClosest(player.transform.position);`
-* RTUtils.cs - RenderTexture utilities for direct drawing sprites, converting to Texture2D.
+* RTUtils.cs - RenderTexture utilities for direct drawing meshes, texts and sprites and converting to Texture2D. See [full docs here](Documentation~/RTUtils.md).
 * ProceduralReverb.cs - Calculates reverb parameters by raycasting into the world around the player (naive and not really physically accurate). First used in "Bruturb".
 * ObjectPreviewer.cs - Directly draws a GameObject for preview without any object cloning. Used for example when you want to preview the "build" location in RTS games.
 * BoundsUtils.cs - Additional utils for bounds like finding bounds of an entire GameObject in world or local space, collider bounds, transforming bounds, etc.

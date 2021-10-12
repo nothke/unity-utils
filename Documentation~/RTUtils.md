@@ -1,5 +1,7 @@
 # RTUtils
 
+[SCRIPT](../Runtime/RTUtils.cs)
+
 RenderTexture utilities for directly drawing meshes, text or textures (sprites) onto a render texture without a camera, and converting to Texture2D.
 
 ![RTUtils sample](images/rtutils_example.gif)
