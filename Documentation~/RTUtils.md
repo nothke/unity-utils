@@ -32,7 +32,7 @@ In between the `rt.BeginXXXRendering()` and `rt.EndRendering()` functions, you c
 
 #### Meshes
 
-Use `rt.DrawMesh(text, position, size)` to draw TMPText meshes. 
+Use `rt.DrawMesh(mesh, material, objectMatrix)` to draw meshes with the provided material and matrix. To draw at a certain position, rotation and scale, create a matrix with `Matrix4x4.TRS(position, rotation, scale);`.
 
 #### Sprites
 
