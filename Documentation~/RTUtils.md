@@ -10,11 +10,13 @@ RenderTexture utilities for directly drawing meshes, text or textures (sprites) 
 
 Typically, rendering to an off-screen texture in Unity is done via a second Camera to which you apply a RenderTexture as a target. However, in the quite common case when you wish to draw simple things, like a few quads, text or a simple unlit mesh, a full Unity camera has an uncecessary overhead, which includes lighting, culling, batching, drawing shadows, sorting geometry, etc. This is especially true in HDRP, where the upfront cost of camera rendering is especially high.
 
-However, if you do need features such as lighting, shadows and other rendering features, then you really need to use a separate Camera. Attempting to draw a lit mesh will RTUtils methods results in strange lighting artifacts.
+However, if you do need features such as lighting, shadows and other rendering features, then you really need to use a separate Camera. Attempting to draw a lit mesh with RTUtils methods results in strange lighting artifacts.
 
-## How to render without a camera
+## How to render without a camera with RTUtils
 
 ### Setting up
+
+First, include `using Nothke.Utils` at the top. The methods are implemented as extensions to RenderTexture so you never need to call RTUtils class.
 
 To start rendering, a capture matrix needs to be setup, which defines the type and location of the "fake camera". You can do this by picking one of the following functions:
 - `rt.BeginOrthoRendering()` to start drawing an orthographic view within a 0-1 space
