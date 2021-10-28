@@ -107,7 +107,7 @@ namespace Nothke.Utils
             for (int i = 0; i < viewWidth; i++)
             {
                 float v = i < viewWidth - releaseWidth ?
-                    adsr.EvaulateIn(i * graphScale) :
+                    adsr.EvaluateIn(i * graphScale) :
                     adsr.EvaluateOut((i - (viewWidth - releaseWidth)) * graphScale);
 
                 Vector2 p = curveStart + new Vector2(i, -v * curveRect.height);

@@ -119,7 +119,7 @@ namespace Nothke.Utils
             float f;
             if (value)
             {
-                f = EvaulateIn(time);
+                f = EvaluateIn(time);
                 lastOnValue = f;
             }
             else
