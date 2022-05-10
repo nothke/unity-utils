@@ -1,23 +1,24 @@
 ﻿///
-/// Deployer by Nothke
+/// Interpolator and InertialInterpolator by Nothke
 /// 
-/// A utility struct for when a thing needs to smoothly transition between 2 states.
+/// A utility struct for when a value needs to smoothly transition between 2 states.
 /// 
-/// Call Stow() to make the state progress towards 0, 
-/// or Deploy() to make it progress towards 1
+/// Call Degress() to make the state progress towards 0, 
+/// or Progress() to make it progress towards 1
 /// Alternatively use Toggle()
+/// SetTo(value) will set it to a state immediately
 /// 
 /// Call Update() every frame or fixed frame for the transition to progress.
 /// 
-/// A Deployer is a version that transits at fixed speed.
+/// An Interpolator is a version that transits at fixed speed.
 /// 
-/// An InertialDeployer is a version that uses inertia, it will accelerate from one state,
+/// An InertialInterpolator is a version that uses inertia, it will accelerate from one state,
 /// and slow down when approaching the end state.
 /// 
 /// Make sure to have a maxSpeed parameter higher than 0, otherwise they won't move.
 /// 
 /// To initialize the struct correctly in inspector (with maxSpeed > 0) use:
-/// public Deployer deployer = Deployer.Default();
+/// public Interpolator interpolator = Interpolator.Default();
 /// 
 /// ============================================================================
 ///
@@ -57,61 +58,77 @@ using UnityEditor;
 
 namespace Nothke.Utils
 {
-    public enum DeploymentState { Stowed, Deploying, Deployed, Stowing };
+    public enum ProgressionState { AtStart, Progressing, AtEnd, Regressing };
 
-    public interface IDeployer
+    public interface IInterpolator
     {
         void Update(float dt);
-        DeploymentState State { get; }
-        bool DeployingOrDeployed { get; }
+        ProgressionState State { get; }
 
-        void Deploy();
-        void Stow();
+        void Progress();
+        void Regress();
+
+        void SetTo(float value);
 
         void Toggle();
     }
 
     [System.Serializable]
-    public struct Deployer : IDeployer
+    public struct Interpolator : IInterpolator
     {
         public float maxSpeed;
 
         [HideInInspector]
         public float progress, velocity;
 
-        DeploymentState state;
+        ProgressionState state;
 
-        public DeploymentState State => state;
-        public bool DeployingOrDeployed => state == DeploymentState.Deploying || state == DeploymentState.Deployed;
+        public ProgressionState State => state;
+        //public bool ProgressingOrAtEnd => state == DeploymentState.Progressing || state == DeploymentState.AtEnd;
 
-        public static Deployer Default()
+        public static Interpolator Default()
         {
-            return new Deployer()
+            return new Interpolator()
             {
                 maxSpeed = 1
             };
         }
 
-        public void Deploy()
+        public void Progress()
         {
             velocity = maxSpeed;
 
-            state = DeploymentState.Deploying;
+            state = ProgressionState.Progressing;
         }
 
-        public void Stow()
+        public void Regress()
         {
             velocity = -maxSpeed;
 
-            state = DeploymentState.Stowing;
+            state = ProgressionState.Regressing;
         }
 
         public void Toggle()
         {
-            if (state == DeploymentState.Deployed || state == DeploymentState.Deploying)
-                Stow();
+            if (state == ProgressionState.AtEnd || state == ProgressionState.Progressing)
+                Regress();
             else
-                Deploy();
+                Progress();
+        }
+
+        public void SetTo(float value)
+        {
+            value = Mathf.Clamp01(value);
+
+            progress = value;
+            velocity = 0;
+
+            if (value == 1)
+                state = ProgressionState.AtEnd;
+            else if (value == 0)
+                state = ProgressionState.AtStart;
+            else
+                state = ProgressionState.Progressing;
         }
 
         public void Update(float dt)
@@ -125,27 +142,27 @@ namespace Nothke.Utils
             {
                 progress = 0;
 
-                if (state == DeploymentState.Stowing)
+                if (state == ProgressionState.Regressing)
                 {
                     velocity = 0;
-                    state = DeploymentState.Stowed;
+                    state = ProgressionState.AtStart;
                 }
             }
             else if (velocity > 0 && progress > 1)
             {
                 progress = 1;
 
-                if (state == DeploymentState.Deploying)
+                if (state == ProgressionState.Progressing)
                 {
                     velocity = 0;
-                    state = DeploymentState.Deployed;
+                    state = ProgressionState.AtEnd;
                 }
             }
         }
     }
 
     [System.Serializable]
-    public struct InertialDeployer : IDeployer
+    public struct InertialInterpolator : IInterpolator
     {
         public float maxSpeed;
         public float acceleration;
@@ -155,15 +172,15 @@ namespace Nothke.Utils
         [HideInInspector] public float velocity;
 
         [HideInInspector] public float accel;
-        [HideInInspector] public DeploymentState state;
+        [HideInInspector] public ProgressionState state;
         [HideInInspector] public bool braking;
 
-        public DeploymentState State => state;
-        public bool DeployingOrDeployed => state == DeploymentState.Deploying || state == DeploymentState.Deployed;
+        public ProgressionState State => state;
+        //public bool ProgressingOrAtEnd => state == DeploymentState.Progressing || state == DeploymentState.AtEnd;
 
-        public static InertialDeployer Default()
+        public static InertialInterpolator Default()
         {
-            return new InertialDeployer()
+            return new InertialInterpolator()
             {
                 maxSpeed = 1,
                 acceleration = 1,
@@ -172,17 +189,17 @@ namespace Nothke.Utils
 
         public void Toggle()
         {
-            if (state == DeploymentState.Deployed || state == DeploymentState.Deploying)
-                Stow();
+            if (state == ProgressionState.AtEnd || state == ProgressionState.Progressing)
+                Regress();
             else
-                Deploy();
+                Progress();
         }
 
-        public void Deploy()
+        public void Progress()
         {
             accel = acceleration;
 
-            state = DeploymentState.Deploying;
+            state = ProgressionState.Progressing;
 
             braking = velocity < 0;
             if (braking)
@@ -193,11 +210,11 @@ namespace Nothke.Utils
             }
         }
 
-        public void Stow()
+        public void Regress()
         {
             accel = -acceleration;
 
-            state = DeploymentState.Stowing;
+            state = ProgressionState.Regressing;
 
             braking = velocity > 0;
             if (braking)
@@ -218,14 +235,20 @@ namespace Nothke.Utils
             if (maxSpeed == 0)
                 Debug.Log("MaxSpeed of a Deployer is 0, there will be no movement. Please set it before using");
 
-            if (velocity < -maxSpeed || velocity > maxSpeed)
+            if (velocity < -maxSpeed)
             {
                 accel = 0;
+                velocity = -maxSpeed + Mathf.Epsilon;
+            }
+            else if (velocity > maxSpeed)
+            {
+                accel = 0;
+                velocity = maxSpeed - Mathf.Epsilon;
             }
 
             if (brakingAcceleration > 0 && !braking)
             {
-                if (velocity > 0 && state == DeploymentState.Deploying)
+                if (velocity > 0 && state == ProgressionState.Progressing)
                 {
                     float stopDist = StoppingDistance(velocity, -brakingAcceleration);
 
@@ -235,7 +258,7 @@ namespace Nothke.Utils
                         braking = true;
                     }
                 }
-                else if (velocity < 0 && state == DeploymentState.Stowing)
+                else if (velocity < 0 && state == ProgressionState.Regressing)
                 {
                     float stopDist = -StoppingDistance(velocity, brakingAcceleration);
 
@@ -253,8 +276,8 @@ namespace Nothke.Utils
             {
                 if (accel < 0 && velocity < 0)
                 {
-                    if (state == DeploymentState.Deploying)
-                        SetDeployed();
+                    if (state == ProgressionState.Progressing)
+                        SetTo(1);
                     else
                     {
                         braking = false;
@@ -263,8 +286,8 @@ namespace Nothke.Utils
                 }
                 else if (accel > 0 && velocity > 0)
                 {
-                    if (state == DeploymentState.Stowing)
-                        SetStowed();
+                    if (state == ProgressionState.Regressing)
+                        SetTo(0);
                     else
                     {
                         braking = false;
@@ -281,37 +304,33 @@ namespace Nothke.Utils
                 progress = 0;
                 velocity = 0;
 
-                if (state == DeploymentState.Stowing)
-                    SetStowed();
+                if (state == ProgressionState.Regressing)
+                    SetTo(0);
             }
             else if (velocity > 0 && progress > 1)
             {
                 progress = 1;
                 velocity = 0;
 
-                if (state == DeploymentState.Deploying)
-                    SetDeployed();
+                if (state == ProgressionState.Progressing)
+                    SetTo(1);
             }
         }
 
-        public void SetStowed()
+        public void SetTo(float value)
         {
-            progress = 0;
+            value = Mathf.Clamp01(value);
+            progress = value;
             velocity = 0;
             accel = 0;
-
-            state = DeploymentState.Stowed;
             braking = false;
-        }
 
-        public void SetDeployed()
-        {
-            progress = 1;
-            velocity = 0;
-            accel = 0;
-
-            state = DeploymentState.Deployed;
-            braking = false;
+            if (value == 1)
+                state = ProgressionState.AtEnd;
+            else if (value == 0)
+                state = ProgressionState.AtStart;
+            else
+                state = ProgressionState.Progressing;
         }
     }
 }
