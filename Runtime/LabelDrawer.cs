@@ -39,6 +39,8 @@ using UnityEngine;
 
 public class LabelDrawer : MonoBehaviour
 {
+    public Font font;
+
     struct Label3D
     {
         public readonly string text;
@@ -56,11 +58,17 @@ public class LabelDrawer : MonoBehaviour
     List<Label3D> labels = new List<Label3D>();
 
     static readonly Color defaultColor = Color.white;
+    GUIStyle style = new GUIStyle();
 
     public static LabelDrawer e;
     void Awake()
     {
         e = this;
+
+        if (font)
+            style.font = font;
+
+        style.normal.textColor = defaultColor;
 
         // Needs to wait for end of frame because it's the only event that happens after OnGUI
         StartCoroutine(EndOfFrameLoop());
@@ -123,7 +131,7 @@ public class LabelDrawer : MonoBehaviour
                 continue;
 
             GUI.contentColor = label.color;
-            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y, 1000, 1000), label.text);
+            GUI.Label(new Rect(screenPos.x, Screen.height - screenPos.y, 1000, 1000), label.text, style);
         }
 
         GUI.contentColor = originalContentColor;
@@ -138,8 +146,6 @@ public class LabelDrawer : MonoBehaviour
         {
             if (Application.isEditor)
             {
-                GUIStyle style = new GUIStyle();
-
                 foreach (var label in labels)
                 {
                     style.normal.textColor = label.color;
