@@ -17,10 +17,10 @@ Most scripts contain description on how to use them in the header, unless the us
 * TwinSorter.cs - Sorts a "target" list by values in the "sorter" list. Useful when having a cache of precomputed values by which you want to sort another list and avoid delegates or Linq.
 * RingBuffer.cs - A simple fixed-sized contiguous double-sided indexable ring buffer (circular queue).
 * AssetDatabaseUtils.cs - Provides a few useful functions to help with AssetDatabase usage, like creating an asset with the full folder hierarchy, etc.
-* ADSREnvelope.cs - Attack-Decay-Sustain-Release envelope helper struct. Can also keep time state, just pass a signal and deltaTime to Update() and it will give you a float. Also comes with an optional, but recommended, custom property drawer in [Editor/ADSREnvelopeDrawer.cs](Editor/ADSREnvelopeDrawer.cs)
+* ADSREnvelope.cs - Attack-Decay-Sustain-Release envelope helper struct. Can also keep time state, just pass a signal and deltaTime to Update() and it will give you a float. Also comes with a custom property drawer.
 * Interpolator.cs - A smooth transition between two states wrapper struct. Also includes an InertialInterpolator that transits in a physical with accelerating and braking and smooth interruption. E.g. for closing/opening massive doors.
 * CableMaker.cs - Builds LineRenderer-based hanging cables/wires using catenary formula. Also has a static function for filling up a list of points so you can use it with any other rendering system.
-* PID.cs - Struct-based [PID controllers](https://en.wikipedia.org/wiki/PID_controller) for Float, Vector2 and Vector3
+* PID.cs - Struct-based [PID controllers](https://en.wikipedia.org/wiki/PID_controller) for Float, Vector2 and Vector3.
 
 ### Other utils you might like not in this repo:
 * [FlyCam](https://github.com/nothke/FlyCam) - Simple WASD flyable camera with zooming and changing speed on scroll.
