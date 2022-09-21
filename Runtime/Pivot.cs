@@ -16,7 +16,7 @@
 /// 
 /// But to be able to manipulate it in scene view,
 /// you unfortunatelly MUST make a custom editor for it,
-/// and call pivot.OnSceneGUI(transform).
+/// and call Pivot.DrawHandles(property, transform).
 /// However, that could be as short as:
 /// 
 /// #if UNITY_EDITOR
@@ -26,8 +26,7 @@
 ///     private void OnSceneGUI()
 ///     {
 ///         TestPivot comp = target as TestPivot;
-///         if (comp.pivot.OnSceneGUI(comp.transform))
-///             serializedObject.ApplyModifiedProperties();
+///         Pivot.DrawHandles(serializedObject.FindProperty("pivot"), comp.transform);
 ///     }
 /// }
 /// #endif
@@ -92,16 +91,18 @@ namespace Nothke.Utils
         }
 
 #if UNITY_EDITOR
-        public bool OnSceneGUI(Transform relativeTo)
+        public static void DrawHandles(SerializedProperty prop, Transform relativeTo)
         {
             const float scaleMult = 0.7f;
 
             var startMatrix = Handles.matrix;
             Handles.matrix = Matrix4x4.Scale(Vector3.one * scaleMult) * startMatrix;
 
+            var posProp = prop.FindPropertyRelative("position");
+            var rotProp = prop.FindPropertyRelative("rotation");
 
-            Vector3 pos = relativeTo.TransformPoint(position) / scaleMult;
-            Quaternion rot = relativeTo.rotation * Quaternion.Euler(rotation);
+            Vector3 pos = relativeTo.TransformPoint(posProp.vector3Value) / scaleMult;
+            Quaternion rot = relativeTo.rotation * Quaternion.Euler(rotProp.vector3Value);
 
             EditorGUI.BeginChangeCheck();
             Handles.TransformHandle(ref pos, ref rot);
@@ -110,12 +111,11 @@ namespace Nothke.Utils
 
             if (EditorGUI.EndChangeCheck())
             {
-                position = relativeTo.InverseTransformPoint(pos * scaleMult);
-                rotation = (Quaternion.Inverse(relativeTo.rotation) * rot).eulerAngles;
-                return true;
+                //Undo.RecordObject(, "Undo pivot change");
+                posProp.vector3Value = relativeTo.InverseTransformPoint(pos * scaleMult);
+                rotProp.vector3Value = (Quaternion.Inverse(relativeTo.rotation) * rot).eulerAngles;
+                prop.serializedObject.ApplyModifiedProperties();
             }
-
-            return false;
         }
 #endif
     }
