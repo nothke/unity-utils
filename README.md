@@ -21,6 +21,7 @@ Most scripts contain description on how to use them in the header, unless the us
 * [Interpolator.cs](Runtime/Interpolator.cs) - A smooth transition between two states wrapper struct. Also includes an InertialInterpolator that transits in a physical with accelerating and braking and smooth interruption. E.g. for closing/opening massive doors.
 * [CableMaker.cs](Runtime/CableMaker.cs) - Builds LineRenderer-based hanging cables/wires using catenary formula. Also has a static function for filling up a list of points so you can use it with any other rendering system.
 * [PID.cs](Runtime/PID.cs) - Struct-based [PID controllers](https://en.wikipedia.org/wiki/PID_controller) for Float, Vector2 and Vector3.
+* [Pivot.cs](Runtime/Pivot.cs) - Struct based position & rotation wrapper with scene editing. Used to avoid overhead of empty child GameObjects when relative points are required.
 
 ### Other utils you might like not in this repo:
 * [FlyCam](https://github.com/nothke/FlyCam) - Simple WASD flyable camera with zooming and changing speed on scroll.
