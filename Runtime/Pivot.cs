@@ -10,7 +10,7 @@
 /// public Pivot pivot;
 /// 
 /// It will show as editable struct in the inspector.
-/// To see it in scene view, in your script's OnDrawGizmos, call:
+/// To see it in scene view, in your script's OnDrawGizmos[Selected], call:
 /// 
 /// pivot.DrawGizmos(transform);
 /// 
@@ -72,11 +72,21 @@ namespace Nothke.Utils
         public Vector3 position;
         public Vector3 rotation;
 
+        public Vector3 GetWorldPosition(Transform relativeTo) =>
+            relativeTo ? relativeTo.TransformPoint(position) : position;
+
+        public Quaternion GetWorldRotation(Transform relativeTo) =>
+            relativeTo ? relativeTo.rotation * Quaternion.Euler(rotation) : Quaternion.Euler(rotation);
+
         public void DrawGizmos(Transform relativeTo)
         {
 #if UNITY_EDITOR
             Vector3 pos = relativeTo.TransformPoint(position);
             Quaternion rot = relativeTo.rotation * Quaternion.Euler(rotation);
+
+            Gizmos.DrawSphere(pos, 0.03f);
+
+            Color c = Gizmos.color;
 
             float size = HandleUtility.GetHandleSize(pos) * 0.3f;
             Gizmos.color = Color.red;
@@ -86,7 +96,7 @@ namespace Nothke.Utils
             Gizmos.color = Color.green;
             Gizmos.DrawRay(pos, rot * Vector3.up * size);
 
-            Gizmos.DrawSphere(pos, 0.03f);
+            Gizmos.color = c;
 #endif
         }
 
