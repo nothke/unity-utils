@@ -8,7 +8,7 @@
 ///
 /// MIT License
 ///
-/// Copyright(c) 2021 Ivan Notaroö
+/// Copyright(c) 2021 Ivan Notaro≈°
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -108,8 +108,8 @@ namespace Nothke.Utils
             if (blitMaterial)
                 return blitMaterial;
 
-
-            return new Material(GetBlitShader());
+            blitMaterial = new Material(GetBlitShader());
+            return blitMaterial;
         }
 
         #endregion
