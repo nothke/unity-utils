@@ -2,8 +2,7 @@
 /// ADSREnvelope.cs by Nothke
 ///
 /// Attack-Decay-Sustain-Release envelope helper struct. 
-/// Also comes with an optional, but recommended, custom property drawer
-/// (see Editor/ADSREnvelopeDrawer.cs)
+/// Also comes with a custom property drawer
 ///
 /// Important notes:
 /// * When using it as a field, initialize one with .Default(),
